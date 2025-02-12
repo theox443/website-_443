@@ -2,7 +2,7 @@ https://nextjs.org/docs/getting-started
 name: Deploy Next.js site to Pages
     branches: ["main"]
  workflow_dispatch:
-permissions:git pages
+permissions:git-pages
   contents: read
   pages: write
   id-token: write
