@@ -1,0 +1,40 @@
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+# Data contoh produk
+products = [
+    {
+        'id': 1,
+        'name': 'Python Basic Course',
+        'description': 'Belajar pemrograman Python dasar untuk pemula',
+        'price': 299000,
+        'live': True
+    },
+    {
+        'id': 2,
+        'name': 'Web Development Bootcamp',
+        'description': 'Full-stack web development dengan Flask dan React',
+        'price': 899000,
+        'live': True
+    },
+    {
+        'id': 3,
+        'name': 'Data Science Masterclass',
+        'description': 'Belajar data science dengan Python dan ML',
+        'price': 1299000,
+        'live': False
+    }
+]
+
+@app.route('/')
+def home():
+    return render_template('index.html', products=products)
+
+@app.route('/product/<int:product_id>')
+def product_detail(product_id):
+    product = next((p for p in products if p['id'] == product_id), None)
+    return render_template('product_detail.html', product=product)
+
+if __name__ == '__main__':
+    app.run(debug=True)
