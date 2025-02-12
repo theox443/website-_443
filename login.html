@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Login</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Produk</a></li>
+                <li><a href="live.html">Live Produk</a></li>
+                <li><a href="profile.html">Profil</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Login ke Akun Anda</h2>
+            <form id="login-form" action="php/login.php" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Toko Kami</p>
+    </footer>
+</body>
+</html>
