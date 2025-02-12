@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .task-input {
+            width: 70%;
+            padding: 8px;
+        }
+        .add-btn {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .delete-btn {
+            margin-left: auto;
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Simple To-Do List</h2>
+    <input type="text" class="task-input" placeholder="Masukkan tugas baru...">
+    <button class="add-btn">Tambah</button>
+    <ul class="task-list"></ul>
+
+    <script>
+        // Inisialisasi tasks dari localStorage atau array kosong
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        // Element references
+        const taskInput = document.querySelector('.task-input');
+        const addBtn = document.querySelector('.add-btn');
+        const taskList = document.querySelector('.task-list');
+
+        // Render tasks awal
+        renderTasks();
+
+        // Event Listeners
+        addBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTask();
+        });
+
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                const newTask = {
+                    id: Date.now(),
+                    text: taskText,
+                    completed: false
+                };
+                tasks.push(newTask);
+                saveAndRender();
+                taskInput.value = '';
+            }
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(task => task.id === id);
+            if (task) task.completed = !task.completed;
+            saveAndRender();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            saveAndRender();
+        }
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                li.innerHTML = `
+                    <input type="checkbox" ${task.completed ? 'checked' : ''}>
+                    <span class="${task.completed ? 'completed' : ''}">${task.text}</span>
+                    <button class="delete-btn">Hapus</button>
+                `;
+                
+                li.querySelector('input').addEventListener('change', () => toggleTask(task.id));
+                li.querySelector('.delete-btn').addEventListener('click', () => deleteTask(task.id));
+                
+                taskList.appendChild(li);
+            });
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        function saveAndRender() {
+            saveToLocalStorage();
+            renderTasks();
+        }
+    </script>
+</body>
+</html>
