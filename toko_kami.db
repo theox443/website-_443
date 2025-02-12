@@ -1,0 +1,95 @@
+import sqlite3
+
+# Membuat koneksi ke database
+conn = sqlite3.connect('toko_kami.db')
+cursor = conn.cursor()
+
+# Membuat tabel User
+cursor.execute('''CREATE TABLE IF NOT EXISTS User (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                nama TEXT NOT NULL,
+                alamat TEXT)''')
+
+# Membuat tabel Produk
+cursor.execute('''CREATE TABLE IF NOT EXISTS Produk (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nama_produk TEXT NOT NULL,
+                harga INTEGER NOT NULL,
+                stok INTEGER NOT NULL)''')
+
+# Fungsi untuk menambahkan user
+def tambah_user(username, password, nama, alamat=None):
+    try:
+        cursor.execute('''INSERT INTO User 
+                        (username, password, nama, alamat)
+                        VALUES (?, ?, ?, ?)''',
+                     (username, password, nama, alamat))
+        conn.commit()
+        print("User berhasil ditambahkan!")
+    except sqlite3.IntegrityError:
+        print("Error: Username sudah terdaftar")
+
+# Fungsi untuk menambahkan produk
+def tambah_produk(nama_produk, harga, stok):
+    cursor.execute('''INSERT INTO Produk 
+                    (nama_produk, harga, stok)
+                    VALUES (?, ?, ?)''',
+                 (nama_produk, harga, stok))
+    conn.commit()
+    print("Produk berhasil ditambahkan!")
+
+# Fungsi untuk update stok
+def update_stok(id_produk, new_stok):
+    cursor.execute('''UPDATE Produk 
+                    SET stok = ? 
+                    WHERE id = ?''',
+                 (new_stok, id_produk))
+    conn.commit()
+    print("Stok berhasil diupdate!")
+
+# Fungsi untuk menghapus produk
+def hapus_produk(id_produk):
+    cursor.execute('''DELETE FROM Produk 
+                    WHERE id = ?''',
+                 (id_produk,))
+    conn.commit()
+    print("Produk berhasil dihapus!")
+
+# Fungsi untuk menampilkan produk
+def tampilkan_produk():
+    cursor.execute('''SELECT * FROM Produk''')
+    products = cursor.fetchall()
+    
+    print("\nDaftar Produk:")
+    print("ID | Nama Produk | Harga | Stok")
+    for product in products:
+        print(f"{product[0]} | {product[1]} | {product[2]} | {product[3]}")
+
+# Contoh penggunaan
+if __name__ == "__main__":
+    # Tambah user contoh
+    tambah_user("admin", "admin123", "Admin Toko")
+    
+    # Tambah produk contoh
+    tambah_produk("Buku Tulis", 5000, 100)
+    tambah_produk("Pensil 2B", 2000, 50)
+    
+    # Tampilkan produk
+    tampilkan_produk()
+    
+    # Update stok produk id 1
+    update_stok(1, 80)
+    
+    # Tampilkan produk setelah update
+    tampilkan_produk()
+    
+    # Hapus produk id 2
+    hapus_produk(2)
+    
+    # Tampilkan produk setelah hapus
+    tampilkan_produk()
+
+# Tutup koneksi database
+conn.close()
