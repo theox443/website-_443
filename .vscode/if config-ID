@@ -1,0 +1,64 @@
+<?php
+// config.php -
+
+
+$servername = "localhost";
+$username = "root";
+$password = "theox443";
+$dbname = "website_config";
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+}
+
+
+function getWebsiteConfig($config_id) {
+        global $conn;
+            
+                // Sanitasi input
+                    $config_id = intval($config_id);
+                        
+                            // Query database
+                                $sql = "SELECT * FROM website_configs WHERE id = $config_id";
+                                    $result = $conn->query($sql);
+                                        
+                                            if ($result->num_rows > 0) {
+                                                        return $result->fetch_assoc();
+                                            } else {
+                                                        return null;
+                                            }
+}
+
+
+if (isset($_GET['config_id'])) {
+        $config_id = $_GET['config_id'];
+            $config = getWebsiteConfig($config_id);
+                
+                    if ($config) {
+                                // Tampilkan konfigurasi
+                                        echo "<h1>Website Configuration ID: " . $config['id'] . "</h1>";
+                                                echo "<ul>";
+                                                        echo "<li>Nama Website: " . $config['site_name'] . "</li>";
+                                                                echo "<li>Theme: " . $config['theme'] . "</li>";
+                                                                        echo "<li>Maintenance Mode: " . ($config['is_maintenance'] ? 'Yes' : 'No') . "</li>";
+                                                                                echo "<li>Google Analytics ID: " . $config['ga_id'] . "</li>";
+                                                                                        echo "</ul>";
+                    } else {
+                                echo "Configuration ID tidak ditemukan!";
+                    }
+} else {
+        echo "Silakan tambahkan parameter config_id pada URL (contoh: ?config_id=1)";
+}
+
+// Tutup koneksi
+$conn->close();
+?>
+}
+                    }
+                    }
+}
+                                            }
+                                            }
+}
+}
