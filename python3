@@ -1,0 +1,21 @@
+import os
+from pathlib import Path
+
+# Method 1: Using os.path.exists()
+def check_file_exists_os_path(file_path):
+    return os.path.exists(file_path)
+
+# Method 2: Using pathlib.Path.exists()
+def check_file_exists_pathlib(file_path):
+    return Path(file_path).exists()
+
+# Method 3: Using os.path.isfile()
+def check_file_exists_isfile(file_path):
+    return os.path.isfile(file_path)
+
+# Example usage:
+file_path = 'example.txt'
+
+print(check_file_exists_os_path(file_path))  # Output: True or False
+print(check_file_exists_pathlib(file_path))  # Output: True or False
+print(check_file_exists_isfile(file_path))   # Output: True or False
